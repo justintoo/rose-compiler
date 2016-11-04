@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+#--------------------------------------------------------------------
+# import: avoid double inclusion
+#--------------------------------------------------------------------
+if test "${Logging__imported+defined}" == "defined"
+then
+    return 0
+fi
+Logging__imported=1
+
+#--------------------------------------------------------------------
+# Configuration
+#--------------------------------------------------------------------
+export LOG_LEVEL_INFO=5
+export LOG_LEVEL_FATAL=4
+export LOG_LEVEL_ERROR=3
+export LOG_LEVEL_WARN=2
+export LOG_LEVEL_DEBUG=1
+export LOG_LEVEL_TRACE=0
+
+: ${LOG_LEVEL:="${LOG_LEVEL_INFO}"}
+
+#--------------------------------------------------------------------
+# API
+#--------------------------------------------------------------------
+function rose::log::log()
+{
+  echo "[${1:-INFO}] $2"
+}
+
+function rose::log::info()
+{
+  if test "${LOG_LEVEL}" -le "${LOG_LEVEL_INFO}"; then
+      rose::log::log "INFO" "$1"
+  fi
+}
+
+function rose::log::debug()
+{
+  if test "${LOG_LEVEL}" -le "${LOG_LEVEL_DEBUG}"; then
+      rose::log::log "DEBUG" "$1"
+  fi
+}
+
+function rose::log::trace()
+{
+  if test "${LOG_LEVEL}" -le "${LOG_LEVEL_TRACE}"; then
+      rose::log::log "TRACE" "$1"
+  fi
+}
+
+function rose::log::warn()
+{
+  if test "${LOG_LEVEL}" -le "${LOG_LEVEL_WARN}"; then
+      rose::log::log "WARN" "$1"
+  fi
+}
+
+function rose::log::error()
+{
+  if test "${LOG_LEVEL}" -le "${LOG_LEVEL_ERROR}"; then
+      rose::log::log "ERROR" "$1"
+  fi
+}
+
+# $1 - String message
+# $2 - Exit command (optional), e.g. "exit 1"
+function rose::log::fatal()
+{
+  if test "${LOG_LEVEL}" -le "${LOG_LEVEL_FATAL}"; then
+      rose::log::log "FATAL" "$1"
+  fi
+  ${2:-}
+}
+
