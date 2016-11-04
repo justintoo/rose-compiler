@@ -18,18 +18,29 @@ import rose/help
 import rose/compile
 
 #--------------------------------------------------------------------
+function rose::cli() {
+#--------------------------------------------------------------------
+  while (( "$#" )); do
+      arg="$1"
+      shift
+
+      case "$arg" in
+        -h|--help) rose::help "$@";;
+        compile) rose::compile "$@";;
+        *) rose::help "$@";;
+      esac
+  done
+}
+
+#--------------------------------------------------------------------
 function rose::main() {
 #--------------------------------------------------------------------
   rose::log::trace "Beginning execution of Rose::main"
 
-  local arg="${1:-"--help"}"
-
-  case "$arg" in
-    -h|--help) rose::help ;;
-    compile) rose::compile ;;
-    *) rose::help ;;
-  esac
+  rose::cli "$@"
 }
 
-rose::main "$@"
+ROSE_CLI="${@:---help}"
+
+rose::main "${ROSE_CLI}"
 

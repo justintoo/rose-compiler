@@ -20,7 +20,24 @@ import util/logging
 #--------------------------------------------------------------------
 # API
 #--------------------------------------------------------------------
+function rose::compile::cli() {
+  rose::log::debug "rose::compile::cli args = $@"
+
+  while (( "$#" )); do
+      arg="$1"
+      shift
+
+      case "$arg" in
+        -h|--help) rose::compile::help "$@";;
+        software) rose::log::info "Got software!";;
+        *) rose::compile::help "$@";;
+      esac
+  done
+}
+#--------------------------------------------------------------------
+#--------------------------------------------------------------------
 function rose::compile::help() {
+#--------------------------------------------------------------------
   cat <<-EOF
 Usage: rose compile [Options] <software>
 
@@ -33,6 +50,6 @@ EOF
 }
 
 function rose::compile() {
-  rose::compile::help
+  rose::compile::cli
 }
 
