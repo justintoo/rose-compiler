@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+#--------------------------------------------------------------------
+# import: avoid double inclusion
+#--------------------------------------------------------------------
+if test "${Rose__Compile__imported+defined}" == "defined"
+then
+    return 0
+fi
+Rose__Compile__imported=1
+
+#--------------------------------------------------------------------
+# Modules
+#--------------------------------------------------------------------
+import util/logging
+
+#--------------------------------------------------------------------
+# Configuration
+#--------------------------------------------------------------------
+
+#--------------------------------------------------------------------
+# API
+#--------------------------------------------------------------------
+function rose::compile::help() {
+  cat <<-EOF
+Usage: rose compile [Options] <software>
+
+Arguments
+  <software>    Name of software to compile
+
+Options
+  --help        Prints this help information
+EOF
+}
+
+function rose::compile() {
+  rose::compile::help
+}
+

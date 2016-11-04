@@ -8,15 +8,27 @@ ROSE_SH_BIN_HOME="$(cd "$(dirname "$0")" && pwd)"
 ROSE_SH_HOME="$(cd "${ROSE_SH_BIN_HOME}/.." && pwd)"
 ROSE_SH_SCRIPTS_DIR="${ROSE_SH_HOME}/binscripts"
 
+#--------------------------------------------------------------------
+# Modules
+#--------------------------------------------------------------------
 source "${ROSE_SH_SCRIPTS_DIR}/import.shinc" || false
 
 import util/logging
 import rose/help
+import rose/compile
 
+#--------------------------------------------------------------------
 function rose::main() {
+#--------------------------------------------------------------------
   rose::log::trace "Beginning execution of Rose::main"
 
-  rose::help
+  local arg="${1:-"--help"}"
+
+  case "$arg" in
+    -h|--help) rose::help ;;
+    compile) rose::compile ;;
+    *) rose::help ;;
+  esac
 }
 
 rose::main "$@"
