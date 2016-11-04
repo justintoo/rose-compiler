@@ -11,9 +11,12 @@ ROSE_SH_SCRIPTS_DIR="${ROSE_SH_HOME}/binscripts"
 source "${ROSE_SH_SCRIPTS_DIR}/import.shinc" || false
 
 import util/logging
+import rose/help
 
 function rose::main() {
   rose::log::trace "Beginning execution of Rose::main"
+
+  rose::help
 }
 
 rose::main "$@"
