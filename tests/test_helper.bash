@@ -1,6 +1,26 @@
 unset ROSE_SH_VERSION
 unset ROSE_SH_DIR
 
+ROSE_SH_TESTS_HOME="$(cd "$(dirname "$0")" && pwd)"
+
+#--------------------------------------------------------------------
+# Modules
+#--------------------------------------------------------------------
+source "${ROSE_SH_TESTS_HOME}/../../../lib/import.shinc"
+
+#--------------------------------------------------------------------
+# Run in strict-mode
+#--------------------------------------------------------------------
+shopt -s extglob  # enable extended globs
+set -o errtrace   # fail if any statement returns non-zero
+set -o errexit    # fail if command fails
+set -o nounset    # fail if variable is not set, i.e. "unbound"
+set -o pipefail   # fail if any command in a pipeline fails
+
+# Required by BATS, otherwise no output
+set +o nounset
+
+
 : ${TMPDIR:=/tmp}
 : ${BATS_TMPDIR:="$TMPDIR"}
 : ${ROSE_SH_ROOT:=}
@@ -66,7 +86,9 @@ assert_output() {
 assert_no_output() {
   local num_lines="${#lines[@]}"
   if [ "$num_lines" -gt "0" ]; then
-      flunk "output not expected"
+    { echo "output not expected"
+      echo "output: ${lines[@]}"
+    } | flunk
   fi
 }
 
@@ -78,7 +100,9 @@ assert_line() {
     for line in "${lines[@]}"; do
       if [ "$line" = "$1" ]; then return 0; fi
     done
-    flunk "expected line \`$1'"
+    { echo "expected: \`$1'"
+      echo "actual:   ${lines[@]}"
+    } | flunk
   fi
 }
 

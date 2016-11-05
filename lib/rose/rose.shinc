@@ -34,16 +34,18 @@ EOF
 #--------------------------------------------------------------------
 function rose::cli() {
 #--------------------------------------------------------------------
+  local args="$@"
+
   while (( "$#" )); do
       arg="$1"
       shift
 
       case "$arg" in
-        -h|--help) rose::help "$@";;
+        -h|--help) rose::help "$args";;
         compile) rose::compile "$@";;
         *)
             rose::log::error "Unrecognized argument: $arg"
-            rose::help "$@"
+            rose::help "$args"
             ;;
       esac
   done
@@ -52,7 +54,5 @@ function rose::cli() {
 #--------------------------------------------------------------------
 function rose::main() {
 #--------------------------------------------------------------------
-  rose::log::trace "Beginning execution of Rose::main"
-
   rose::cli "$@"
 }

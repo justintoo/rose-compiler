@@ -1,35 +1,50 @@
 #!/usr/bin/env bats
 
-#--------------------------------------------------------------------
-# Run in strict-mode
-#--------------------------------------------------------------------
-shopt -s extglob  # enable extended globs
-set -o errtrace   # fail if any statement returns non-zero
-set -o errexit    # fail if command fails
-set -o pipefail   # fail if any command in a pipeline fails
+load test_helper
 
 #--------------------------------------------------------------------
 # Modules
 #--------------------------------------------------------------------
-load test_helper
+import util/logging
+
 
 #--------------------------------------------------------------------
 # Tests
 #--------------------------------------------------------------------
+@test "no argument shows --help" {
+  local LOG_LEVEL=INFO
+  local LOG_MESSAGE="Test log message"
+
+  # Using low-level logger
+  run rose::log::log "${LOG_LEVEL}" "${LOG_MESSAGE}"
+  assert_success
+  assert_line "[${LOG_LEVEL}] ${LOG_MESSAGE}"
+
+  # Using INFO logger
+  run rose::log::info "${LOG_MESSAGE}"
+  assert_success
+  assert_line "[${LOG_LEVEL}] ${LOG_MESSAGE}"
+}
 
 @test "log INFO message" {
   local LOG_LEVEL=INFO
   local LOG_MESSAGE="Test log message"
 
   # Using low-level logger
-  run rose-log rose::log::log "${LOG_LEVEL}" "${LOG_MESSAGE}"
+  run rose::log::log "${LOG_LEVEL}" "${LOG_MESSAGE}"
   assert_success
   assert_line "[${LOG_LEVEL}] ${LOG_MESSAGE}"
 
-  # Using INFO logger
-  run rose-log rose::log::info "${LOG_MESSAGE}"
+  # Log level is enabled
+  LOG_LEVEL="${LOG_LEVEL_INFO}" \
+      run rose::log::info "${LOG_MESSAGE}"
   assert_success
-  assert_line "[${LOG_LEVEL}] ${LOG_MESSAGE}"
+
+  # Log level is NOT enabled
+  ROSE_SH_LOG_LEVEL="9999999" \
+      run rose::log::info "${LOG_MESSAGE}"
+  assert_success
+  assert_no_output
 }
 
 @test "log DEBUG message" {
@@ -37,18 +52,18 @@ load test_helper
   local LOG_MESSAGE="Test log message"
 
   # Using low-level logger
-  run rose-log rose::log::log "${LOG_LEVEL}" "${LOG_MESSAGE}"
+  run rose::log::log "${LOG_LEVEL}" "${LOG_MESSAGE}"
   assert_success
   assert_line "[${LOG_LEVEL}] ${LOG_MESSAGE}"
 
   # Log level is enabled
-  LOG_LEVEL="${LOG_LEVEL_DEBUG}" \
-      run rose-log rose::log::debug "${LOG_MESSAGE}"
+  ROSE_SH_LOG_LEVEL="${LOG_LEVEL_DEBUG}" \
+      run rose::log::debug "${LOG_MESSAGE}"
   assert_success
 
   # Log level is NOT enabled
-  LOG_LEVEL="9999999" \
-      run rose-log rose::log::debug "${LOG_MESSAGE}"
+  ROSE_SH_LOG_LEVEL="9999999" \
+      run rose::log::debug "${LOG_MESSAGE}"
   assert_success
   assert_no_output
 }
@@ -58,18 +73,18 @@ load test_helper
   local LOG_MESSAGE="Test log message"
 
   # Using low-level logger
-  run rose-log rose::log::log "${LOG_LEVEL}" "${LOG_MESSAGE}"
+  run rose::log::log "${LOG_LEVEL}" "${LOG_MESSAGE}"
   assert_success
   assert_line "[${LOG_LEVEL}] ${LOG_MESSAGE}"
 
   # Log level is enabled
-  LOG_LEVEL="${LOG_LEVEL_WARN}" \
-      run rose-log rose::log::warn "${LOG_MESSAGE}"
+  ROSE_SH_LOG_LEVEL="${LOG_LEVEL_WARN}" \
+      run rose::log::warn "${LOG_MESSAGE}"
   assert_success
 
   # Log level is NOT enabled
-  LOG_LEVEL="9999999" \
-      run rose-log rose::log::warn "${LOG_MESSAGE}"
+  ROSE_SH_LOG_LEVEL="9999999" \
+      run rose::log::warn "${LOG_MESSAGE}"
   assert_success
   assert_no_output
 }
@@ -79,18 +94,18 @@ load test_helper
   local LOG_MESSAGE="Test log message"
 
   # Using low-level logger
-  run rose-log rose::log::log "${LOG_LEVEL}" "${LOG_MESSAGE}"
+  run rose::log::log "${LOG_LEVEL}" "${LOG_MESSAGE}"
   assert_success
   assert_line "[${LOG_LEVEL}] ${LOG_MESSAGE}"
 
   # Log level is enabled
-  LOG_LEVEL="${LOG_LEVEL_TRACE}" \
-      run rose-log rose::log::trace "${LOG_MESSAGE}"
+  ROSE_SH_LOG_LEVEL="${LOG_LEVEL_TRACE}" \
+      run rose::log::trace "${LOG_MESSAGE}"
   assert_success
 
   # Log level is NOT enabled
-  LOG_LEVEL="9999999" \
-      run rose-log rose::log::trace "${LOG_MESSAGE}"
+  ROSE_SH_LOG_LEVEL="9999999" \
+      run rose::log::trace "${LOG_MESSAGE}"
   assert_success
   assert_no_output
 }
@@ -100,18 +115,18 @@ load test_helper
   local LOG_MESSAGE="Test log message"
 
   # Using low-level logger
-  run rose-log rose::log::log "${LOG_LEVEL}" "${LOG_MESSAGE}"
+  run rose::log::log "${LOG_LEVEL}" "${LOG_MESSAGE}"
   assert_success
   assert_line "[${LOG_LEVEL}] ${LOG_MESSAGE}"
 
   # Log level is enabled
-  LOG_LEVEL="${LOG_LEVEL_ERROR}" \
-      run rose-log rose::log::error "${LOG_MESSAGE}"
+  ROSE_SH_LOG_LEVEL="${LOG_LEVEL_ERROR}" \
+      run rose::log::error "${LOG_MESSAGE}"
   assert_success
 
   # Log level is NOT enabled
-  LOG_LEVEL="9999999" \
-      run rose-log rose::log::error "${LOG_MESSAGE}"
+  ROSE_SH_LOG_LEVEL="9999999" \
+      run rose::log::error "${LOG_MESSAGE}"
   assert_success
   assert_no_output
 }
@@ -121,18 +136,18 @@ load test_helper
   local LOG_MESSAGE="Test log message"
 
   # Using low-level logger
-  run rose-log rose::log::log "${LOG_LEVEL}" "${LOG_MESSAGE}"
+  run rose::log::log "${LOG_LEVEL}" "${LOG_MESSAGE}"
   assert_success
   assert_line "[${LOG_LEVEL}] ${LOG_MESSAGE}"
 
   # Log level is enabled
-  LOG_LEVEL="${LOG_LEVEL_FATAL}" \
-      run rose-log rose::log::fatal "${LOG_MESSAGE}"
+  ROSE_SH_LOG_LEVEL="${LOG_LEVEL_FATAL}" \
+      run rose::log::fatal "${LOG_MESSAGE}"
   assert_success
 
   # Log level is NOT enabled
-  LOG_LEVEL="9999999" \
-      run rose-log rose::log::fatal "${LOG_MESSAGE}"
+  ROSE_SH_LOG_LEVEL="9999999" \
+      run rose::log::fatal "${LOG_MESSAGE}"
   assert_success
   assert_no_output
 }
@@ -142,8 +157,8 @@ load test_helper
   local LOG_MESSAGE="Test log message"
 
   # Log level not set => INFO is on by default
-  LOG_LEVEL="" \
-      run rose-log rose::log::info "${LOG_MESSAGE}"
+  ROSE_SHLOG_LEVEL="" \
+      run rose::log::info "${LOG_MESSAGE}"
   assert_success
   assert_line "[${LOG_LEVEL}] ${LOG_MESSAGE}"
 }
@@ -153,8 +168,8 @@ load test_helper
   local LOG_MESSAGE="Test log message"
 
   # Log level not set => DEBUG is on by default
-  LOG_LEVEL="" \
-      run rose-log rose::log::debug "${LOG_MESSAGE}"
+  ROSE_SHLOG_LEVEL="" \
+      run rose::log::debug "${LOG_MESSAGE}"
   assert_success
   assert_line "[${LOG_LEVEL}] ${LOG_MESSAGE}"
 }
@@ -164,8 +179,8 @@ load test_helper
   local LOG_MESSAGE="Test log message"
 
   # Log level not set => WARN is on by default
-  LOG_LEVEL="" \
-      run rose-log rose::log::warn "${LOG_MESSAGE}"
+  ROSE_SH_LOG_LEVEL="" \
+      run rose::log::warn "${LOG_MESSAGE}"
   assert_success
   assert_line "[${LOG_LEVEL}] ${LOG_MESSAGE}"
 }
@@ -175,8 +190,7 @@ load test_helper
   local LOG_MESSAGE="Test log message"
 
   # Log level not set => TRACE is off by default
-  LOG_LEVEL="" \
-      run rose-log rose::log::trace "${LOG_MESSAGE}"
+  run rose::log::trace "${LOG_MESSAGE}"
   assert_success
   assert_no_output
 }
@@ -186,8 +200,8 @@ load test_helper
   local LOG_MESSAGE="Test log message"
 
   # Log level not set => ERROR is on by default
-  LOG_LEVEL="" \
-      run rose-log rose::log::error "${LOG_MESSAGE}"
+  ROSE_SH_LOG_LEVEL="" \
+      run rose::log::error "${LOG_MESSAGE}"
   assert_success
   assert_line "[${LOG_LEVEL}] ${LOG_MESSAGE}"
 }
@@ -197,8 +211,8 @@ load test_helper
   local LOG_MESSAGE="Test log message"
 
   # Log level not set => FATAL is on by default
-  LOG_LEVEL="" \
-      run rose-log rose::log::fatal "${LOG_MESSAGE}"
+  ROSE_SH_LOG_LEVEL="" \
+      run rose::log::fatal "${LOG_MESSAGE}"
   assert_success
   assert_line "[${LOG_LEVEL}] ${LOG_MESSAGE}"
 }
@@ -208,13 +222,13 @@ load test_helper
 
   # Queue messages
   for message in "${MESSAGES[@]}"; do
-      run rose-log rose::log::queue "$message"
+      run rose::log::queue "$message"
       assert_success
       assert_no_output
   done
 
   # Output queued messages
-  run rose-log rose::log::flush
+  run rose::log::flush
 
   # Validate messages
   for message in "${MESSAGES[@]}"; do
@@ -228,13 +242,13 @@ load test_helper
 
   # Queue messages
   for ((i=0; i<${#LOG_LEVELS[*]}; i++)); do
-      run rose-log rose::log::queue "$(rose-log rose::log::log "${LOG_LEVELS[$i]}" "${LOG_MESSAGES[$i]}")"
+      run rose::log::queue "$(rose::log::log "${LOG_LEVELS[$i]}" "${LOG_MESSAGES[$i]}")"
       assert_success
       assert_no_output
   done
 
   # Output queued messages
-  output="$(run rose-log rose::log::flush)"
+  output="$(run rose::log::flush)"
   assert_success
 
   # <TODO> Compare line-by-line

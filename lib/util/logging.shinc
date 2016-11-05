@@ -11,15 +11,15 @@ Logging__imported=1
 #--------------------------------------------------------------------
 # Configuration
 #--------------------------------------------------------------------
-export LOG_LEVEL_INFO=6
-export LOG_LEVEL_FATAL=5
-export LOG_LEVEL_ERROR=4
-export LOG_LEVEL_WARN=3
-export LOG_LEVEL_DEBUG=2
-export LOG_LEVEL_TRACE=1
+export ROSE_SH_LOG_LEVEL_INFO=6
+export ROSE_SH_LOG_LEVEL_FATAL=5
+export ROSE_SH_LOG_LEVEL_ERROR=4
+export ROSE_SH_LOG_LEVEL_WARN=3
+export ROSE_SH_LOG_LEVEL_DEBUG=2
+export ROSE_SH_LOG_LEVEL_TRACE=1
 
-: ${LOG_LEVEL:=2}
-export LOG_QUEUE=()
+export ROSE_SH_LOG_LEVEL=2
+export ROSE_SH_LOG_QUEUE=()
 
 #--------------------------------------------------------------------
 # API
@@ -36,35 +36,35 @@ function rose::log::log()
 
 function rose::log::info()
 {
-  if test -z "${LOG_LEVEL}" || test "${LOG_LEVEL}" -le "${LOG_LEVEL_INFO}"; then
+  if test -z "${ROSE_SH_LOG_LEVEL}" || test "${ROSE_SH_LOG_LEVEL}" -le "${ROSE_SH_LOG_LEVEL_INFO}"; then
       rose::log::log "INFO" "$@"
   fi
 }
 
 function rose::log::debug()
 {
-  if test -z "${LOG_LEVEL}" || test "${LOG_LEVEL}" -le "${LOG_LEVEL_DEBUG}"; then
+  if test -z "${ROSE_SH_LOG_LEVEL}" || test "${ROSE_SH_LOG_LEVEL}" -le "${ROSE_SH_LOG_LEVEL_DEBUG}"; then
       rose::log::log "DEBUG" "$@"
   fi
 }
 
 function rose::log::trace()
 {
-  if test -z "${LOG_LEVEL}" || test "${LOG_LEVEL}" -le "${LOG_LEVEL_TRACE}"; then
+  if test -z "${ROSE_SH_LOG_LEVEL}" || test "${ROSE_SH_LOG_LEVEL}" -le "${ROSE_SH_LOG_LEVEL_TRACE}"; then
       rose::log::log "TRACE" "$@"
   fi
 }
 
 function rose::log::warn()
 {
-  if test -z "${LOG_LEVEL}" || test "${LOG_LEVEL}" -le "${LOG_LEVEL_WARN}"; then
+  if test -z "${ROSE_SH_LOG_LEVEL}" || test "${ROSE_SH_LOG_LEVEL}" -le "${ROSE_SH_LOG_LEVEL_WARN}"; then
       rose::log::log "WARN" "$@"
   fi
 }
 
 function rose::log::error()
 {
-  if test -z "${LOG_LEVEL}" || test "${LOG_LEVEL}" -le "${LOG_LEVEL_ERROR}"; then
+  if test -z "${ROSE_SH_LOG_LEVEL}" || test "${ROSE_SH_LOG_LEVEL}" -le "${ROSE_SH_LOG_LEVEL_ERROR}"; then
       rose::log::log "ERROR" "$@"
   fi
 }
@@ -72,7 +72,7 @@ function rose::log::error()
 # $@ - String message
 function rose::log::fatal()
 {
-  if test -z "${LOG_LEVEL}" || test "${LOG_LEVEL}" -le "${LOG_LEVEL_FATAL}"; then
+  if test -z "${ROSE_SH_LOG_LEVEL}" || test "${ROSE_SH_LOG_LEVEL}" -le "${ROSE_SH_LOG_LEVEL_FATAL}"; then
       rose::log::log "FATAL" "$@"
   fi
 }
@@ -92,19 +92,14 @@ function rose::log::and_abort_not_implemented_yet()
 
 function rose::log::queue() {
   local message="$@"
-  LOG_QUEUE+=("$message")
+  ROSE_SH_LOG_QUEUE+=("$message")
 }
 
 function rose::log::flush() {
   old_IFS="${IFS}"
   IFS=$'\n\t' # strict-mode, excluding spaces
-  for message in "${LOG_QUEUE[@]:-}"; do
+  for message in "${ROSE_SH_LOG_QUEUE[@]:-}"; do
       rose::log::stdout "${message}"
   done
   IFS="${old_IFS}"
 }
-
-function rose::log::main() {
-  "$@"
-}
-

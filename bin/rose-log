@@ -15,5 +15,65 @@ source "${ROSE_SH_LIB_HOME}/import.shinc" || false
 
 import util/logging
 
-rose::log::main "${@:---help}"
+#--------------------------------------------------------------------
+function rose::log::help() {
+#--------------------------------------------------------------------
+  cat <<-EOF
+Usage: rose-log [options] command [args]
 
+Commands
+  info
+  debug
+  warn
+  trace
+  error
+  fatal
+
+Options
+  --help    Prints this help information
+EOF
+}
+
+#--------------------------------------------------------------------
+function rose::log::cli() {
+#--------------------------------------------------------------------
+  local args="$@" cmd="<not specified>"
+
+  if test "$#" -gt 0; then
+      cmd="$1"
+      shift
+  fi
+
+  # Validate Command
+  case "$cmd" in
+    h|help|-h|--help)
+        rose::log::help "$@"
+        return
+        ;;
+    log)   rose::log::log   "$@" ;;
+    info)  rose::log::info  "$@" ;;
+    debug) rose::log::debug "$@" ;;
+    warn)  rose::log::warn  "$@" ;;
+    trace) rose::log::trace "$@" ;;
+    error) rose::log::error "$@" ;;
+    fatal) rose::log::fatal "$@" ;;
+    -*)
+        rose::log::fatal "Unrecognized option: $cmd"
+        rose::log::help "$args"
+        exit 1
+        ;;
+    *)
+        rose::log::fatal "Unrecognized cmd: $cmd"
+        rose::log::help "$args"
+        exit 1
+        ;;
+  esac
+}
+
+#--------------------------------------------------------------------
+function rose::log::main() {
+#--------------------------------------------------------------------
+  rose::log::cli "$@"
+}
+
+rose::log::main "$@"
