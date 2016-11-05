@@ -15,13 +15,5 @@ source "${ROSE_SH_LIB_HOME}/import.shinc" || false
 
 import util/logging
 
-#--------------------------------------------------------------------
-function rose::log::main() {
-#--------------------------------------------------------------------
-  rose::log::trace "Beginning execution of rose::log::main"
-
-  "$@"
-}
-
 rose::log::main "${@:---help}"
 

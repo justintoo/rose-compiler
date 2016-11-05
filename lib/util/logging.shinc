@@ -103,3 +103,8 @@ function rose::log::flush() {
   done
   IFS="${old_IFS}"
 }
+
+function rose::log::main() {
+  "$@"
+}
+
