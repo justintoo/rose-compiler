@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 
-shopt -s extglob
-set -o errtrace
-set -o errexit
+#--------------------------------------------------------------------
+# Run in strict-mode
+#--------------------------------------------------------------------
+shopt -s extglob  # enable extended globs
+set -o errtrace   # fail if any statement returns non-zero
+set -o errexit    # fail if command fails
+set -o pipefail   # fail if any command in a pipeline fails
 
 #--------------------------------------------------------------------
 # Logistics
@@ -44,7 +48,7 @@ function make_check::list_tests() {
 #------------------------------------------------------------------------------
 function make_check::main() {
   for test_name in $(make_check::list_tests); do
-      rose::log::info "running test ${test_name}"
+      rose::log::stdout "Running test ${test_name}"
       bats "${test_name}"
   done
 
@@ -52,4 +56,3 @@ function make_check::main() {
 }
 
 make_check::main "$@"
-
