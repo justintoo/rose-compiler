@@ -7,18 +7,18 @@ set -o errexit
 #--------------------------------------------------------------------
 # Logistics
 #--------------------------------------------------------------------
-ROSE_SH_TESTS_HOME="$(cd "$(dirname "$0")" && pwd)"
-ROSE_SH_HOME="$(cd "${ROSE_SH_TESTS_HOME}/.." && pwd)"
-ROSE_SH_SCRIPTS_DIR="${ROSE_SH_HOME}/lib"
-ROSE_SH_TESTS="${ROSE_SH_HOME}/tests"
-ROSE_SH_BATS="${ROSE_SH_TESTS}/bats"
+export ROSE_SH_TESTS_HOME="$(cd "$(dirname "$0")" && pwd)"
+export ROSE_SH_HOME="$(cd "${ROSE_SH_TESTS_HOME}/.." && pwd)"
+export ROSE_SH_LIB_HOME="${ROSE_SH_HOME}/lib"
+export ROSE_SH_TESTS="${ROSE_SH_HOME}/tests"
+export ROSE_SH_BATS="${ROSE_SH_TESTS}/bats"
 
 #--------------------------------------------------------------------
 # Modules
 #--------------------------------------------------------------------
 export PATH="${ROSE_SH_BATS}/bin:${PATH}"
 
-source "${ROSE_SH_SCRIPTS_DIR}/import.shinc" || false
+source "${ROSE_SH_LIB_HOME}/import.shinc" || false
 
   import util/logging
 

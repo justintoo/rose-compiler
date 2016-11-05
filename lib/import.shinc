@@ -24,22 +24,22 @@ function import() {
         exit 1
     fi
 
-    if test "x${ROSE_SH_SCRIPTS_DIR}:-notset}" == "xnotset"
+    if test "x${ROSE_SH_LIB_HOME}:-notset}" == "xnotset"
     then
         echo "$script_name : Undefined script absolute dir. Did you remove getScriptAbsoluteDir? Dying."
         exit 1
     fi
 
-    if test "x${ROSE_SH_SCRIPTS_DIR}" == "x"
+    if test "x${ROSE_SH_LIB_HOME}" == "x"
     then
         echo "$script_name : empty script path. Dying."
         exit 1
     fi
 
-    if test -e "${ROSE_SH_SCRIPTS_DIR}/$module.shinc"
+    if test -e "${ROSE_SH_LIB_HOME}/$module.shinc"
     then
         # import from script directory
-        . "${ROSE_SH_SCRIPTS_DIR}/$module.shinc"
+        . "${ROSE_SH_LIB_HOME}/$module.shinc"
         return
     elif test "x${SHELL_LIBRARY_PATH:-notset}" != "xnotset"
     then

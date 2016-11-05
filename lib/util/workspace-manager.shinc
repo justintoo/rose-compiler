@@ -28,4 +28,3 @@ function workspace::new() {
 function workspace::main() {
 
 }
-

@@ -27,19 +27,20 @@ import util/logging
 #--------------------------------------------------------------------
 function rose::compile::set_workspace() {
 #--------------------------------------------------------------------
-  rose::log::debug "[rose::compile::set_workspace] args = $@"
+  rose::log::debug "args = $@"
 
   local workspace="$1"
 
   if test "$#" -eq 0 || test -z "$workspace"; then
       rose::log::error "Argument missing for --workspace=<arg>"
   else
-      rose::log::and_set_variable ROSE_COMPILE__WORKSPACE="$workspace"
+      ROSE_SH_COMPILE__WORKSPACE="$workspace"
+
   fi
 }
 
 function rose::compile::cli() {
-  rose::log::debug "rose::compile::cli args = $@"
+  rose::log::debug "args = $@"
 
   while (( "$#" )); do
       arg="$1"
@@ -78,7 +79,8 @@ function rose::compile::create_workspace() {
 #--------------------------------------------------------------------
 function rose::compile() {
 #--------------------------------------------------------------------
-  rose::compile::cli
+  rose::log::debug "args = $@"
+
+  rose::compile::cli "$@"
   rose::compile::create_workspace
 }
-
