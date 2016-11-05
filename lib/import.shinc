@@ -11,7 +11,7 @@ Import__imported=1
 
 set -o nounset
 
-function import() { 
+function import() {
     # @description importer routine to get external functionality.
     # @description the first location searched is the script directory.
     # @description if not found, search the module in the paths contained in $SHELL_LIBRARY_PATH environment variable
@@ -64,4 +64,11 @@ function import() {
     fi
     echo "Unable to find module $module."
     exit 1
+}
+
+function import__allow_unbound_variables() {
+  # Allow unbound variables
+  set +u
+  import "$@"
+  set -u
 }

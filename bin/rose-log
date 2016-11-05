@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 
+#--------------------------------------------------------------------
+# Run in strict-mode
+#--------------------------------------------------------------------
 shopt -s extglob
 set -o errtrace
 set -o errexit
+set -o nounset
+set -o pipefail # fail if any command in a pipeline fails
 
 #--------------------------------------------------------------------
 # Logistics
