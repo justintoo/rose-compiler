@@ -27,7 +27,10 @@ function rose::cli() {
       case "$arg" in
         -h|--help) rose::help "$@";;
         compile) rose::compile "$@";;
-        *) rose::help "$@";;
+        *)
+            rose::log::error "Unrecognized argument: $arg"
+            rose::help "$@"
+            ;;
       esac
   done
 }

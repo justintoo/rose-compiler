@@ -31,9 +31,9 @@ function make_check::list_tests() {
     test_dir="$(dirname "${test_path}")"
     test_dir_parent="$(basename "${test_dir}")"
 
-    rose::log::debug "test_path=\"${test_path}\""
-    rose::log::debug "tool_dir=\"${test_dir}\""
-    rose::log::debug "tool_dir_parent=\"${test_dir_parent}\""
+    rose::log::queue "$(rose::log::debug "test_path=${test_path}")"
+    rose::log::queue "$(rose::log::debug "tool_dir=${test_dir}")"
+    rose::log::queue "$(rose::log::debug "tool_dir_parent=${test_dir_parent}")"
 
     echo "${test_dir_parent}/${test_name}"
   done
@@ -47,6 +47,8 @@ function make_check::main() {
       rose::log::info "running test ${test_name}"
       bats "${test_name}"
   done
+
+  rose::log::flush
 }
 
 make_check::main "$@"
