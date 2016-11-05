@@ -11,7 +11,15 @@ $ ./run-tests.sh
  ✓ log TRACE message
  ✓ log ERROR message
  ✓ log FATAL message
+ ✓ log INFO messages on by default
+ ✓ log DEBUG messages on by default
+ ✓ log WARN messages on by default
+ ✓ log TRACE messages off by default
+ ✓ log ERROR messages on by default
+ ✓ log FATAL messages on by default
+ ✓ log queued strings
+ ✓ log queued log messages
 
-6 tests, 0 failures
+14 tests, 0 failures
 ``
 
