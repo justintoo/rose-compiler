@@ -31,7 +31,7 @@ function rose::log::stdout()
 
 function rose::log::log()
 {
-  rose::log::stdout "[${1:-INFO}] ${2:-}"
+  rose::log::stdout "[${1:-INFO}] ${@:2}"
 }
 
 function rose::log::info()
@@ -96,14 +96,10 @@ function rose::log::queue() {
 }
 
 function rose::log::flush() {
+  old_IFS="${IFS}"
+  IFS=$'\n\t' # strict-mode, excluding spaces
   for message in "${LOG_QUEUE[@]:-}"; do
       rose::log::stdout "${message}"
   done
+  IFS="${old_IFS}"
 }
-
-# <TODO>
-function rose::log::and_set_variable()
-{
-  rose::log::and_abort_not_implemented_yet
-}
-
