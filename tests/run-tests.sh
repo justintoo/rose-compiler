@@ -9,7 +9,7 @@ set -o errexit
 #--------------------------------------------------------------------
 ROSE_SH_TESTS_HOME="$(cd "$(dirname "$0")" && pwd)"
 ROSE_SH_HOME="$(cd "${ROSE_SH_TESTS_HOME}/.." && pwd)"
-ROSE_SH_SCRIPTS_DIR="${ROSE_SH_HOME}/binscripts"
+ROSE_SH_SCRIPTS_DIR="${ROSE_SH_HOME}/lib"
 ROSE_SH_TESTS="${ROSE_SH_HOME}/tests"
 ROSE_SH_BATS="${ROSE_SH_TESTS}/bats"
 

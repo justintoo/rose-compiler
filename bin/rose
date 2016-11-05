@@ -6,7 +6,7 @@ set -o errexit
 
 ROSE_SH_BIN_HOME="$(cd "$(dirname "$0")" && pwd)"
 ROSE_SH_HOME="$(cd "${ROSE_SH_BIN_HOME}/.." && pwd)"
-ROSE_SH_SCRIPTS_DIR="${ROSE_SH_HOME}/binscripts"
+ROSE_SH_SCRIPTS_DIR="${ROSE_SH_HOME}/lib"
 
 #--------------------------------------------------------------------
 # Modules
