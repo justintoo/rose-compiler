@@ -16,10 +16,28 @@ import util/logging
 #--------------------------------------------------------------------
 # Configuration
 #--------------------------------------------------------------------
+: ${ROSE_COMPILE__WORKSPACE:=$(pwd)}
+: ${ROSE_COMPILE__HELP:=true}
+: ${ROSE_COMPILE__SOFTWARE:=}
 
 #--------------------------------------------------------------------
 # API
 #--------------------------------------------------------------------
+
+#--------------------------------------------------------------------
+function rose::compile::set_workspace() {
+#--------------------------------------------------------------------
+  rose::log::debug "[rose::compile::set_workspace] args = $@"
+
+  local workspace="$1"
+
+  if test "$#" -eq 0 || test -z "$workspace"; then
+      rose::log::error "Argument missing for --workspace=<arg>"
+  else
+      rose::log::and_set_variable ROSE_COMPILE__WORKSPACE="$workspace"
+  fi
+}
+
 function rose::compile::cli() {
   rose::log::debug "rose::compile::cli args = $@"
 
@@ -28,13 +46,13 @@ function rose::compile::cli() {
       shift
 
       case "$arg" in
-        -h|--help) rose::compile::help "$@";;
-        software) rose::log::info "Got software!";;
-        *) rose::compile::help "$@";;
+        -h|--help) ROSE_COMPILE__HELP=true ;;
+        --workspace) rose::compile::set_workspace "$@" ;;
+        -*) rose::log::warn "Unrecognized CLI Option: $arg" ;;
       esac
   done
 }
-#--------------------------------------------------------------------
+
 #--------------------------------------------------------------------
 function rose::compile::help() {
 #--------------------------------------------------------------------
@@ -45,11 +63,22 @@ Arguments
   <software>    Name of software to compile
 
 Options
-  --help        Prints this help information
+  --help               Prints this help information
+  --workspace=<path>   Directory to use as a workspace; creates it if it doesn't exist.
+                       Default:\pwd
 EOF
 }
 
+#--------------------------------------------------------------------
+function rose::compile::create_workspace() {
+#--------------------------------------------------------------------
+  :
+}
+
+#--------------------------------------------------------------------
 function rose::compile() {
+#--------------------------------------------------------------------
   rose::compile::cli
+  rose::compile::create_workspace
 }
 

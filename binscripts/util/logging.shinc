@@ -73,3 +73,8 @@ function rose::log::fatal()
   ${2:-}
 }
 
+function rose::log::and_set_variable()
+{
+  rose::log::info "$1"
+}
+

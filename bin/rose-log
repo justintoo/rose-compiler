@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+shopt -s extglob
+set -o errtrace
+set -o errexit
+
+#--------------------------------------------------------------------
+# Logistics
+#--------------------------------------------------------------------
+ROSE_SH_BIN_HOME="$(cd "$(dirname "$0")" && pwd)"
+ROSE_SH_HOME="$(cd "${ROSE_SH_BIN_HOME}/.." && pwd)"
+ROSE_SH_SCRIPTS_DIR="${ROSE_SH_HOME}/binscripts"
+
+#--------------------------------------------------------------------
+# Modules
+#--------------------------------------------------------------------
+source "${ROSE_SH_SCRIPTS_DIR}/import.shinc" || false
+
+import util/logging
+
+#--------------------------------------------------------------------
+function rose::log::main() {
+#--------------------------------------------------------------------
+  rose::log::trace "Beginning execution of rose::log::main"
+
+  "$@"
+}
+
+rose::log::main "${@:---help}"
+
