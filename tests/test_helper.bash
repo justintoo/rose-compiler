@@ -1,7 +1,10 @@
 unset ROSE_SH_VERSION
 unset ROSE_SH_DIR
 
-: ${ROSE_SH_TEST_DIR:="${BATS_TMPDIR}/install-local"}
+: ${TMPDIR:=/tmp}
+: ${BATS_TMPDIR:="$TMPDIR"}
+: ${ROSE_SH_ROOT:=}
+: ${ROSE_SH_TEST_DIR:="${BATS_TMPDIR}/rose-sh"}
 
 # guard against executing this block twice due to bats internals
 if [ "$ROSE_SH_ROOT" != "${ROSE_SH_TEST_DIR}/root" ]; then
