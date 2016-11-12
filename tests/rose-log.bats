@@ -26,6 +26,25 @@ import util/logging
   assert_line "[${LOG_LEVEL}] ${LOG_MESSAGE}"
 }
 
+@test "stdout message" {
+  local LOG_MESSAGE="Test log message"
+
+  # Using stdout logger
+  run rose::log::stdout "${LOG_MESSAGE}"
+  assert_success
+  assert_line "${LOG_MESSAGE}"
+}
+
+@test "log message" {
+  local LOG_LEVEL=INFO
+  local LOG_MESSAGE="Test log message"
+
+  # Using low-level logger
+  run rose::log::log "${LOG_LEVEL}" "${LOG_MESSAGE}"
+  assert_success
+  assert_line "[${LOG_LEVEL}] ${LOG_MESSAGE}"
+}
+
 @test "log INFO message" {
   local LOG_LEVEL=INFO
   local LOG_MESSAGE="Test log message"
@@ -236,7 +255,29 @@ import util/logging
   done
 }
 
-@test "log queued log messages" {
+@test "log queued messages" {
+  local MESSAGES=("1" "2" "3" "4" "5")
+
+  # Queue messages
+  for message in "${MESSAGES[@]}"; do
+      run rose::log::queue "$message"
+      assert_success
+      assert_no_output
+  done
+
+  # Output queued messages
+  run rose::log::flush
+
+  # Validate messages
+  for message in "${MESSAGES[@]}"; do
+      assert_line "$message"
+  done
+
+  # No messages in the queue
+  ROSE_SH_LOG_QUEUE=
+  run rose::log::flush
+  assert_no_output
+
   local LOG_LEVELS=("INFO" "DEBUG" "WARN" "TRACE" "ERROR" "FATAL")
   local LOG_MESSAGES=("info message" "debug message" "warn message" "trace message" "error message" "fatal message")
 

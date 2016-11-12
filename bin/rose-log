@@ -50,13 +50,14 @@ function rose::log::cli() {
         rose::log::help "$@"
         return
         ;;
-    log)   rose::log::log   "$@" ;;
-    info)  rose::log::info  "$@" ;;
-    debug) rose::log::debug "$@" ;;
-    warn)  rose::log::warn  "$@" ;;
-    trace) rose::log::trace "$@" ;;
-    error) rose::log::error "$@" ;;
-    fatal) rose::log::fatal "$@" ;;
+    stdout)  rose::log::stdout "$@" ;;
+    log)     rose::log::log    "$@" ;;
+    info)    rose::log::info   "$@" ;;
+    debug)   rose::log::debug  "$@" ;;
+    warn)    rose::log::warn   "$@" ;;
+    trace)   rose::log::trace  "$@" ;;
+    error)   rose::log::error  "$@" ;;
+    fatal)   rose::log::fatal  "$@" ;;
     -*)
         rose::log::fatal "Unrecognized option: $cmd"
         rose::log::help "$args"
