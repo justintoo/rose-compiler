@@ -236,6 +236,16 @@ import util/logging
   assert_line "[${LOG_LEVEL}] ${LOG_MESSAGE}"
 }
 
+@test "log FATAL abort message" {
+  local LOG_LEVEL=FATAL
+  local LOG_MESSAGE="Abort log message"
+
+  # Using stdout logger
+  run rose::log::abort "${LOG_MESSAGE}"
+  assert_failure
+  assert_line "[${LOG_LEVEL}] ${LOG_MESSAGE}"
+}
+
 @test "log queued strings" {
   local MESSAGES=("1" "2" "3" "4" "5")
 

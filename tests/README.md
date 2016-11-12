@@ -20,10 +20,11 @@ Running test tests/rose-log.bats
  ✓ log TRACE messages off by default
  ✓ log ERROR messages on by default
  ✓ log FATAL messages on by default
+ ✓ log FATAL abort message
  ✓ log queued strings
  ✓ log queued messages
 
-17 tests, 0 failures
+18 tests, 0 failures
 Running test tests/rose.bats
 
 0 tests, 0 failures
