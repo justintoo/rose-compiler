@@ -10,7 +10,6 @@ ROSE_SH_LIB_HOME="${ROSE_SH_HOME}/lib"
 #--------------------------------------------------------------------
 # Modules
 #--------------------------------------------------------------------
-source "${ROSE_SH_LIB_HOME}/strict-mode.shinc"
 source "${ROSE_SH_LIB_HOME}/rose/rose.shinc"
 
 rose::main ${@:---help}
