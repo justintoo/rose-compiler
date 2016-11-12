@@ -4,7 +4,10 @@ The test suite for `rose-sh` currently utilizes the [Bash Automated Testing Syst
 
 ``bash
 $ ./run-tests.sh
-[INFO] running test tests/rose-log.bats
+Running test tests/rose-log.bats
+ ✓ no argument shows --help
+ ✓ stdout message
+ ✓ log message
  ✓ log INFO message
  ✓ log DEBUG message
  ✓ log WARN message
@@ -18,8 +21,11 @@ $ ./run-tests.sh
  ✓ log ERROR messages on by default
  ✓ log FATAL messages on by default
  ✓ log queued strings
- ✓ log queued log messages
+ ✓ log queued messages
 
-14 tests, 0 failures
+17 tests, 0 failures
+Running test tests/rose.bats
+
+0 tests, 0 failures
 ``
 
